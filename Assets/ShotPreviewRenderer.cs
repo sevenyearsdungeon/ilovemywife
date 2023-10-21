@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 public class ShotPreviewRenderer : MonoBehaviour
 {
     [SerializeField] LineRenderer lr;
-    const int positionCount = 100;
+    const int positionCount = 200;
     Vector3[] positions = new Vector3[positionCount];
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class ShotPreviewRenderer : MonoBehaviour
             Vector3 acceleration = totalforce / mass;
 
             previousPosition = currentPosition;
-            currentPosition = currentPosition + currentVelocity * Time.fixedDeltaTime + acceleration / 2 * Time.fixedDeltaTime * Time.fixedDeltaTime;
+            currentPosition = currentPosition + currentVelocity * Time.fixedDeltaTime + acceleration  * Time.fixedDeltaTime * Time.fixedDeltaTime;
             if(Physics.Raycast(new Ray(previousPosition, currentPosition-previousPosition),out RaycastHit hit,(currentPosition-previousPosition).magnitude))
             {
                 for (int j = i; j < positionCount; j++)

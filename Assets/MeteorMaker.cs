@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +16,7 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
     [SerializeField] float minPower = 1;
     [SerializeField] Gradient powerColorGradient;
     [SerializeField] ShotPreviewRenderer shotPreviewRenderer;
+    private float asteroidMass = 5;
 
 
     private void Start()
@@ -40,7 +42,7 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
 
         // start
         Rigidbody newAsteroid = GameObject.Instantiate(prefabAsteroid);
-        
+
         Collider collider = newAsteroid.GetComponent<Collider>();
         collider.enabled = false;
         newAsteroid.transform.position = initialPosition;
@@ -63,7 +65,7 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
             arrow.rectTransform.sizeDelta = new Vector2((initialMousePosition - currentMousePosition).magnitude - 25, 25);
 
             arrow.color = powerColorGradient.Evaluate(Mathf.InverseLerp(minPower, maxPower, power));
-            shotPreviewRenderer.CalculatePreview(initialPosition,delta, newAsteroid.mass);
+            shotPreviewRenderer.CalculatePreview(initialPosition, delta, newAsteroid.mass);
             yield return null;
         }
         // release
@@ -77,6 +79,29 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
         arrow.enabled = false;
     }
 
+    public void ClearAsteroids()
+    {
+        StartCoroutine(DestroyAsteroids());
+    }
+
+    private IEnumerator DestroyAsteroids()
+    {
+        while (MeteorCollision.activeMeteors.Count > 0)
+        {
+            foreach (var item in MeteorCollision.activeMeteors)
+            {
+                if (UnityEngine.Random.value < Time.deltaTime)
+                {
+
+                    item.OnCollisionEnter(null);
+                    break;
+                }
+            }
+            yield return null;
+        }
+    }
+
+    public void SetMass(float v) => prefabAsteroid.mass = v;
 
     Vector3 GetPositionFromMouse()
     {
