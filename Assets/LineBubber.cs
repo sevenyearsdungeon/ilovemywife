@@ -5,6 +5,8 @@ using UnityEngine;
 public class LineBubber : MonoBehaviour
 {
     [SerializeField]
+    Camera mainCamera;
+    [SerializeField]
     private GameObject linePrefab;
     List<LineController> lineControllers = new List<LineController>();
     public int lineCount = 100;
@@ -14,6 +16,7 @@ public class LineBubber : MonoBehaviour
     public float gain = 1;
 
     public float speed = 0.5f;
+    public float pointerStrength = 1;
 
     public float spring = 0.01f;
     public float lineWidth = 1;
@@ -21,6 +24,7 @@ public class LineBubber : MonoBehaviour
     private void Start()
     {
         CreateLines(lineCount, vertexCount);
+        mainCamera = Camera.main;
     }
 
     int lastVertexCount = -1, lastLineCount = -1;
@@ -30,10 +34,18 @@ public class LineBubber : MonoBehaviour
         if (lastLineCount != lineCount || lastVertexCount != vertexCount)
             CreateLines(lineCount, vertexCount);
 
+        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Vector3 position = Vector3.zero;
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            position = hit.point;
+            position.z = pointerStrength;
+        }
+
 
         foreach (var line in lineControllers)
         {
-            line.SetPositions(Time.time * speed, gain, spring);
+            line.SetPositions(Time.time * speed, gain, spring, position);
         }
     }
 
