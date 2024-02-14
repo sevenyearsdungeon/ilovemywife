@@ -18,7 +18,7 @@ public class HeartGenerator : MonoBehaviour
             Rect rect = heartParent.rect;
             float height = rect.height;
             float width = rect.width;
-            FallMotion newHeart = Instantiate(heartPrefab, Vector3.Lerp(heartParent.TransformPoint(Vector3.zero),heartParent.TransformPoint(Vector3.right*width),Random.value)+Vector3.up*200,
+            FallMotion newHeart = Instantiate(heartPrefab, Vector3.Lerp(heartParent.TransformPoint(Vector3.zero),heartParent.TransformPoint(Vector3.right*width),Random.value)+Vector3.up*400,
                 quaternion.identity, heartParent);
             newHeart.gameObject.SetActive(true);
             Destroy(newHeart.gameObject, 2*height / newHeart.direction.magnitude);
