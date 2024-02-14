@@ -25,7 +25,7 @@ public class FallMotion : MonoBehaviour
         rotationPeriod = Random.value * 1 + 2;
          heartImage = GetComponentInChildren<Image>();
         heartImage.color = heartColorGradient.Evaluate(Random.value);
-        transform.localScale = Vector3.one * Random.Range(0.9f, 1.1f);
+        transform.localScale = Vector3.one * Random.Range(1.9f, 3f);
     }
 
     // Update is called once per frame
