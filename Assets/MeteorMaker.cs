@@ -24,6 +24,8 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
         arrow.enabled = false;
     }
 
+    Coroutine launchCoroutine = null;
+
     IEnumerator LaunchMeteorCoroutine(Vector3 initialPosition, Vector3 initialMousePosition)
     {
         Vector3 currentPosition = initialPosition;
@@ -113,6 +115,7 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        StartCoroutine(LaunchMeteorCoroutine(GetPositionFromMouse(), Input.mousePosition));
+        if (launchCoroutine == null && eventData.button == PointerEventData.InputButton.Left)
+            StartCoroutine(LaunchMeteorCoroutine(GetPositionFromMouse(), Input.mousePosition));
     }
 }
