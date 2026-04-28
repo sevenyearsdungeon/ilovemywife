@@ -43,7 +43,8 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
         shotPreviewRenderer.Show();
 
         // start
-        Rigidbody newAsteroid = GameObject.Instantiate(prefabAsteroid);
+        Rigidbody newAsteroid = Instantiate(prefabAsteroid);
+        newAsteroid.gameObject.SetActive(false);
 
         Collider collider = newAsteroid.GetComponent<Collider>();
         collider.enabled = false;
@@ -64,7 +65,8 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
             power = Mathf.Clamp(delta.magnitude, minPower, maxPower);
 
             arrow.transform.eulerAngles = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg * Vector3.forward;
-            arrow.rectTransform.sizeDelta = new Vector2((initialMousePosition - currentMousePosition).magnitude - 25, 25);
+            arrow.rectTransform.sizeDelta =
+                new Vector2((initialMousePosition - currentMousePosition).magnitude - 25, 25);
 
             arrow.color = powerColorGradient.Evaluate(Mathf.InverseLerp(minPower, maxPower, power));
             shotPreviewRenderer.CalculatePreview(initialPosition, delta, newAsteroid.mass);
@@ -72,8 +74,9 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
         }
         // release
 
-        newAsteroid.velocity = delta;
+        newAsteroid.gameObject.SetActive(true);
         newAsteroid.isKinematic = false;
+        newAsteroid.linearVelocity = delta;
         newAsteroid.GetComponent<GravitationalBody>().enabled = true;
 
         shotPreviewRenderer.Hide();
@@ -94,11 +97,11 @@ public class MeteorMaker : MonoBehaviour, IPointerDownHandler
             {
                 if (UnityEngine.Random.value < Time.deltaTime)
                 {
-
                     item.OnCollisionEnter(null);
                     break;
                 }
             }
+
             yield return null;
         }
     }

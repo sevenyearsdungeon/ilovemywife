@@ -27,7 +27,7 @@ public class MeteorCollision : MonoBehaviour
         {
             var rb = GetComponent<Rigidbody>();
             explosionPoint = rb.position;
-            explosionDirection = Quaternion.LookRotation(rb.velocity);
+            explosionDirection = Quaternion.LookRotation(rb.linearVelocity);
         }
         else
         {
